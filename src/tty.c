@@ -403,10 +403,12 @@ ic_private tty_t* tty_new(alloc_t* mem, int fd_in)
   tty->esc_initial_timeout = 100; 
   #endif
   tty->esc_timeout = 10;
+#if !defined(EMSCRIPTEN)
   if (!(isatty(tty->fd_in) && tty_init_raw(tty) && tty_init_utf8(tty))) {
     tty_free(tty);
     return NULL;
   }
+#endif
   return tty;
 }
 

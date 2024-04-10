@@ -59,6 +59,9 @@ ic_public char* ic_readline(const char* prompt_text)
 {
   ic_env_t* env = ic_get_env();
   if (env == NULL) return NULL;
+#if defined(EMSCRIPTEN)
+    return ic_editline(env, prompt_text);   // in editline.c
+#else
   if (!env->noedit) {
     // terminal editing enabled
     return ic_editline(env, prompt_text);   // in editline.c
@@ -77,6 +80,7 @@ ic_public char* ic_readline(const char* prompt_text)
     // read directly from stdin
     return ic_getline(env->mem);
   }
+#endif
 }
 
 
