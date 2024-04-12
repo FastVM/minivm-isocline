@@ -847,7 +847,11 @@ ic_private ssize_t sbuf_for_each_row( stringbuf_t* sbuf, ssize_t termw, ssize_t 
 // Duplicate and decode from utf-8 (for non-utf8 terminals)
 ic_private char* sbuf_strdup_from_utf8(stringbuf_t* sbuf) {
   ssize_t len = sbuf_len(sbuf);
-  if (sbuf == NULL || len <= 0) return NULL;
+  if (sbuf == NULL || len <= 0) {
+    char* s = mem_zalloc_tp_n(sbuf->mem, char, 1);
+    s[0] = '\0';
+    return s;
+  }
   char* s = mem_zalloc_tp_n(sbuf->mem, char, len);
   if (s == NULL) return NULL;
   ssize_t dest = 0;
